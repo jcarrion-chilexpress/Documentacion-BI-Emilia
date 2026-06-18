@@ -1,0 +1,6 @@
+docs/
+├── img/             # imagenes varias
+├── modelo_datos.md  #
+├── fuentes_datos.md # arhivo con las consultas Databricks de la tablas
+└── README.md        # resumen con la informacion de cada indicador
+
