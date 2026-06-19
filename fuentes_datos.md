@@ -10,13 +10,32 @@ adl_gold.enol_v2.t_captura_api_onemarketer_encuesta_data_cruda
 ### Consulta
 
 ``` sql
-%sql
 DROP TEMPORARY VARIABLE IF EXISTS session.message_date;
-DECLARE VARIABLE fecha date DEFAULT '2026-06-16';
+declare variable fecha date default '2026-06-15';
 
-SELECT *
-FROM adl_gold.enol_v2.t_captura_api_onemarketer_encuesta_data_cruda
-WHERE Fecha >= fecha
+select 
+a.*
+,case
+	when EvalIA IN (6,7) then 'Satisfecho'
+	when EvalIA IN (5) THEN 'Neutro'
+	when EvalIA BETWEEN 1 AND 4 THEN 'Insatisfecho'
+	else 'Nulo' end as Resutl_Eval_IA
+------------------------------------------------------
+,EvalAcceso
+,case
+	when EvalAcceso IN (6,7) then 'Facilidad'
+	when EvalAcceso IN (5) THEN 'Facilidad Neutro'
+	when EvalAcceso BETWEEN 1 AND 4 THEN 'No Facilidad'
+	else 'Nulo' end as Resutl_Facilidad
+------------------------------------------------------
+,EvalResolvReq
+,case
+	when EvalResolvReq = 'Si' THEN 'Resuelve'
+	when EvalResolvReq = 'No' THEN 'No Resuelve'
+	else 'Nulo' end as Resutl_Tasa_de_resolucion
+FROM adl_gold.enol_v2.t_captura_api_onemarketer_encuesta_data_cruda as a
+where a.Fecha > fecha
+limit 100
 
 ```
 
