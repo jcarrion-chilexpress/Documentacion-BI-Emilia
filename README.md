@@ -2,8 +2,8 @@
 
 ## 📋 Diccionario de Indicadores
 
-* Tabla origen `adl_gold.enol_v2.t_captura_api_onemarketer_encuesta_data_cruda`
-
+### * Tabla Origen `adl_gold.enol_v2.t_captura_api_onemarketer_encuesta_data_cruda`
+---
 | Indicador | Descripción | Estado |
 |------------|------------|------------|
 | `%Satisfaccion cliente / CSAT`| Mide que Tan satisfecho esta el usuario con el Canal | 🟡 En Validación |
@@ -15,37 +15,32 @@
 | `% Abandono` | Porcentaje de conversaciones abandonadas | 🔴 Pendiente |
 | `%Tasa de derivación` | % de conversaciones derivadas y cerradas por un ejecutivo | 🟡 En Validación |
 | `Tasa de abandono` | % de clientes que abandona el canal, sin resolver | 🔴 Pendiente |
-
 ---
-* Tabla origen `adl_sandbox.nriosm.conversation_session_history`
 
-| Indicador | Descripción | Área |
+<br>
+<br>
+
+
+### * Tabla Origen `adl_sandbox.nriosm.conversation_session_history`
+
+| Indicador | Descripción | Estado |
 |------------|------------|------------|
-| `% Reclamos`| Índice Neto de Satisfacción | CX |
-| `%Emociones`| Índice Neto de Satisfacción | CX |
+| `% Reclamos`| Por definir | 🔴 Pendiente |
+| `%Emociones`| Por definir | 🔴 Pendiente |
+---
+
+<br>
+<br>
 
 
-* Tabla origen `adl_sandbox.nriosm.adl_sandbox.nriosm.balancer_sessions`
 
-| Indicador | Descripción | Área |
+### * Tabla Origen `adl_sandbox.nriosm.adl_sandbox.nriosm.balancer_sessions`
+
+| Indicador | Descripción | Estado |
 |------------|------------|------------|
-| ``|  | CX |
-| ``|  | CX |
+| `Por definir`| Por definir | 🔴 Pendiente |
+| `Por definir`| Por definir | 🔴 Pendiente |
 
 ---
 
-Tasa de derivación - NOK: data cruda
-Tasa de abandono   - NOK: conversaciones
-
-FCR                - NOK: hay que conversarlo con el equipo de SAC
----
-Cobertura Canal    - NOK: faltan accesos a tráfico web
-
-
-## Tabla: adl_sandbox.nriosm.conversation_session_history
-Reclamos           - NOK: En Proceso
-Emociones          - NOK: falta revisar y adaptar el codigo
-
-
-## Tabla: adl_sandbox.nriosm.adl_sandbox.nriosm.balancer_sessions
 
