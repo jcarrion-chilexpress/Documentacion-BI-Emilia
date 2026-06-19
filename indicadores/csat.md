@@ -1,8 +1,3 @@
-
-```dax
-%Satisfaccion cliente / CSAT
-```
-
 ## %Satisfaccion cliente / CSAT
 
 ### Objetivo
