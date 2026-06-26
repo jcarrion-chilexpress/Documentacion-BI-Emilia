@@ -13,10 +13,6 @@ DIVIDE(
     CALCULATE(
         COUNT(onemarketer_encuesta_data_cruda[Id]) , FILTER(
             onemarketer_encuesta_data_cruda, LOWER(onemarketer_encuesta_data_cruda[Resutl_Facilidad]) ="facilidad"))
-    -
-    CALCULATE(
-        COUNT(onemarketer_encuesta_data_cruda[Id]) , FILTER(
-            onemarketer_encuesta_data_cruda, LOWER(onemarketer_encuesta_data_cruda[Resutl_Facilidad]) ="No facilidad"))
     ---- todo lo que no sea Nulo
     ,CALCULATE(
         COUNT(onemarketer_encuesta_data_cruda[Id]) , FILTER(

@@ -7,8 +7,6 @@ Mide que Tan satisfecho esta el usuario con el Canal
 ### Fórmula
 
 ``` dax
-%Satisfaccion cliente / CSAT
-
 #% Satisfaccion Cliente (CSAT) = 
 DIVIDE(
     CALCULATE(COUNT(onemarketer_encuesta_data_cruda[Id]) , FILTER(

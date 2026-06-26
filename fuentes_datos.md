@@ -11,10 +11,11 @@ adl_gold.enol_v2.t_captura_api_onemarketer_encuesta_data_cruda
 
 ``` sql
 DROP TEMPORARY VARIABLE IF EXISTS session.message_date;
-declare variable fecha date default '2026-06-15';
+declare variable fecha date default '2026-06-24';
 
 select 
-a.*
+a.* except(EvalAcceso,EvalResolvReq,EvalIA)
+,EvalIA
 ,case
 	when EvalIA IN (6,7) then 'Satisfecho'
 	when EvalIA IN (5) THEN 'Neutro'
@@ -56,9 +57,8 @@ adl_sandbox.nriosm.conversation_session_history
 
 ### Consulta
 ``` sql
-%sql
-DROP TEMPORARY VARIABLE IF EXISTS session.message_date;
-DECLARE VARIABLE message_date date DEFAULT '2026-06-16';
+DROP TEMPORARY VARIABLE IF EXISTS session.dias;
+DECLARE VARIABLE dias INTEGER DEFAULT 5;
 
 WITH mensajes AS (
   SELECT
@@ -88,9 +88,8 @@ WITH mensajes AS (
         THEN 1 ELSE 0 END) AS error_reclamos
 
   FROM adl_sandbox.nriosm.conversation_session_history as a
-    where cast(message_timestamp as date) >= message_date
-    and a.session_id in (64276148507)
-    group by all
+    where cast(message_timestamp as date) >= current_date() - dias
+    group by all    
 )
 ,conversaciones AS (
     SELECT
@@ -115,10 +114,9 @@ WITH mensajes AS (
                 'timestamp', CAST(x.timestamp AS STRING)
             )
         ) AS history
-
     FROM mensajes
     GROUP BY session_id,cast(message_timestamp as date)
-)
+ )
 ,conversaciones_final AS (
     SELECT
         c.*,
@@ -130,6 +128,7 @@ WITH mensajes AS (
         size(filter(history, x -> x.role = 'user')) AS mensajes_usuario,
         size(filter(history, x -> x.role = 'assistant')) AS mensajes_bot,
         ROUND(size(history) / 2.0, 1) AS turnos_conversacion,
+        filter(history, x -> x.role = 'user') as si,
         CASE
             WHEN size(filter(history, x -> x.role = 'user')) = 1
                 THEN 'Abandono'
@@ -163,13 +162,28 @@ WITH mensajes AS (
             ORDER BY Fecha
         ) AS orden_enc
     FROM adl_gold.enol_v2.t_captura_api_onemarketer_encuesta_data_cruda
-    WHERE Fecha >= message_date
+    WHERE Fecha >= current_date() - dias
       AND AtencionIA = 'Si'
       AND OperadorAbre = 'robot'
       AND OperadorCierra = 'robot'
       AND EvalIA IS NOT NULL
       AND TRIM(EvalIA) <> ''
+),
+ISN as (SELECT
+    cast(Fecha AS STRING) AS Fecha,
+    ROUND(
+        (
+            SUM(CASE WHEN eval_ia IN (6,7) THEN 1 ELSE 0 END)
+            -
+            SUM(CASE WHEN eval_ia BETWEEN 1 AND 4 THEN 1 ELSE 0 END)
+        ) * 100.0 / COUNT(*),
+        2
+    ) AS isn
+FROM encuestas
+WHERE eval_ia BETWEEN 1 AND 7
+GROUP BY cast(Fecha AS STRING)
 )
+
 ,reclamos as
 (
     SELECT
@@ -192,7 +206,8 @@ WITH mensajes AS (
             ELSE 'SIN_RECLAMO'
         END AS estado_reclamo
             FROM mensajes a
-            GROUP BY a.message_date,a.session_id)
+            GROUP BY a.message_date,a.session_id
+)
 
 SELECT
     c.session_id,
@@ -224,9 +239,12 @@ SELECT
     e.eval_acceso,
     e.resolucion,
     ------ Datos de Reclamos
-    reclamos.* EXCEPT(message_date,session_id)
+    reclamos.* EXCEPT(message_date,session_id),
+    isn.isn
 
 FROM conversaciones_final as c
+LEFT JOIN ISN as isn
+    ON c.message_date = isn.fecha
 LEFT JOIN encuestas as e
     ON CAST(c.id AS STRING) = e.id
    AND c.orden_conv = e.orden_enc

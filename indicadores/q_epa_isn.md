@@ -14,14 +14,10 @@ Mide la Satisfaccion reltativa del clientes en una escala de 1 a 7:
 ``` dax
 %Q EPA ISN / CSAT
 
-#%Q EPA ISN =
+#%Q EPA ISN = 
 DIVIDE(
     CALCULATE(COUNT(onemarketer_encuesta_data_cruda[Id]) , FILTER(
         onemarketer_encuesta_data_cruda, lower(onemarketer_encuesta_data_cruda[Resutl_Eval_IA])="satisfecho"
-    ))
-    -
-    CALCULATE(COUNT(onemarketer_encuesta_data_cruda[Id]) , FILTER(
-        onemarketer_encuesta_data_cruda, lower(onemarketer_encuesta_data_cruda[Resutl_Eval_IA])="insatisfecho"
     ))  
     ,CALCULATE(
         COUNT(onemarketer_encuesta_data_cruda[Id]) , FILTER(
